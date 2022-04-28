@@ -29,7 +29,7 @@ LV2 PSTAGE DATA CONSTRUCTION
 
 <img width="871" alt="mor_som_1st_labeling" src="https://user-images.githubusercontent.com/79218038/163963037-3c311ec7-d41e-41f4-8698-dbdf2ca7a766.png">
 
-(임시 labeling을 하던 시점에 표에 오류가 있었다. 때문에 위의 결과 중 label16의 결과가 label15의 결과라고 생각하면 된다. label16은 존재하지 않는 라벨이라고 생각하면 된다.)
+(임시 labeling을 하던 시점에 표에 오류가 있었다. 위의 결과 중 label16의 결과가 label15의 결과라고 생각하면 된다. label16은 존재하지 않는 라벨이라고 생각하면 된다.)
 
 이후 각자의 분석을 기반으로 label 정의를 수정했다. 의미적인 통합, 매우 적은 빈도수를 갖는 label 정의 변경 등이 이루어졌는데 그 결과는 다음과 같다.
 <img width="836" alt="스크린샷 2022-04-19 오후 5 48 20" src="https://user-images.githubusercontent.com/79218038/163963487-7f98e8e6-8d0f-44e3-8fa7-29ead8591080.png">
@@ -65,14 +65,15 @@ tagtog을 이용해서 각각 labeling을 진행했으며(각 100개의 문장�
 
 마지막으로 900여개의 문장과 정의한 라벨을 이용해 모델을 학습시키고 f1 score를 측정했다.
 8:2의 비율로 train:test dataset을 나누고(stratified), train dataset은 다시 8:2 비율로 train:valid dataset으로 나눴다.
-'roberta-large' 모델로 학습을 진행했고 학습이 완료된 후 inference를 통해 모델에 대한 예측라벨이 담긴 csv파일을 만들었다.
+'klue/roberta-large' 모델로 학습을 진행했고 학습이 완료된 후 inference를 통해 모델에 대한 예측라벨이 담긴 csv파일을 만들었다.
 해당 파일과 test dataset의 label을 정답으로 이용해 f1 score를 측정한 결과 0.828 정도의 값이 나왔다.
-다만 한 문장에서 여러 entity 쌍을 포착하는 경우가 있어 중복되는 문장이 많았고(물론 sentence만 중복이고 entity쌍과 relation은 달랐다) 이것이 random하게 sampling된 후 test dataset으로 나뉘어지다보니 학습에 사용된 문장과 같은 문장이 test set에 포함되는 경우가 있었다. 이 때문에 f1 score가 높게 나온게 아닌가 하는 추측을 해본다. 
+다만 한 문장에서 여러 entity 쌍을 포착하는 경우가 있어 중복되는 sentence가 많았고(물론 sentence만 중복이고 entity쌍과 relation은 달랐다) 이것이 random하게 sampling된 후 test dataset으로 나뉘어지다보니 학습에 사용된 문장과 같은 문장이 test set에 포함되는 경우가 있었다. 이 때문에 f1 score가 높게 나온게 아닌가 하는 추측을 해본다. 
 
 그럼에도 괜찮은 성능이 나왔다고 생각하며 특히 잘못 예측한 label들을 분석해봤을 때 특정 label에서 실수가 반복되거나 하지는 않는 것으로 보였다. 
+
 <img width="414" alt="스크린샷 2022-04-21 오후 9 22 49" src="https://user-images.githubusercontent.com/79218038/164457867-c71bdd35-1af9-47bf-b811-45f35c2e54fa.png">
 
-위의 표를 보면 예측에 실패하는 특정한 패턴이 보이지 않는다.
+위의 결과(예측값과 실제답이 다른 경우)를 보면 예측의 실패는 모든 label에서 비슷하게 일어난다. 특정 label에서 예측이 특히 실패하는 등의 패턴은 보이지 않았다.
 
 ## REVIEW
 데이터 제작의 전 과정을 경험해보는 좋은 시간이었다. model만큼이나(아니 어쩌면 model보다 더) data도 중요하다고 생각한다. 
